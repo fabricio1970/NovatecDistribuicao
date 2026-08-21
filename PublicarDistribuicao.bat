@@ -52,13 +52,12 @@ if errorlevel 1 (
 git -C "!REPO!" diff --cached --quiet -- "cliente\NovatecCliente.exe" "cliente\version.txt" "servidor\NovatecServidor.exe" "servidor\version.txt" "CompilarCliente.bat" "CompilarServidor.bat" "CompilarTudo.bat" "ObterVersaoBuild.ps1" "PublicarDistribuicao.bat" "docs\build-pipeline-map.md"
 if not errorlevel 1 (
     echo Nenhuma alteracao para commit.
-    exit /b 0
-)
-
-git -C "!REPO!" commit -m "Release Cliente e Servidor v!CLIENT_FILEVERSION!"
-if errorlevel 1 (
-    echo ERRO: git commit falhou.
-    exit /b 60
+) else (
+    git -C "!REPO!" commit -m "Release Cliente e Servidor v!CLIENT_FILEVERSION!"
+    if errorlevel 1 (
+        echo ERRO: git commit falhou.
+        exit /b 60
+    )
 )
 
 git -C "!REPO!" push origin main
