@@ -4,6 +4,17 @@ setlocal EnableExtensions
 set "ROOT=%~dp0"
 set "NOVATEC_BUILD_ALL=1"
 
+ssh-add -l 2>nul | findstr /c:"SHA256:Y76+xKkyLleAq+m3qxNwqmyNK+hfAQIEqXvWtQ9A8PI" >nul
+if errorlevel 1 (
+    echo Carregando chave SSH...
+    ssh-add "%USERPROFILE%\.ssh\id_ed25519_novatec"
+    if errorlevel 1 (
+        echo ERRO: nao foi possivel carregar a chave SSH.
+        exit /b 60
+    )
+)
+set "NOVATEC_SSH_READY=1"
+
 echo ================================================
 echo COMPILANDO NOVATEC SERVIDOR E CLIENTE
 echo ================================================

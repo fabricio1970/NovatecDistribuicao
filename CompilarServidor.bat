@@ -13,6 +13,19 @@ set "BDSDIR=C:\Program Files (x86)\Embarcadero\Studio\23.0"
 set "RSVARS=%BDSDIR%\bin\rsvars.bat"
 set "MSBUILD=C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 
+if not defined NOVATEC_SSH_READY (
+    ssh-add -l 2>nul | findstr /c:"SHA256:Y76+xKkyLleAq+m3qxNwqmyNK+hfAQIEqXvWtQ9A8PI" >nul
+    if errorlevel 1 (
+        echo Carregando chave SSH...
+        ssh-add "%USERPROFILE%\.ssh\id_ed25519_novatec"
+        if errorlevel 1 (
+            echo ERRO: nao foi possivel carregar a chave SSH.
+            exit /b 60
+        )
+    )
+    set "NOVATEC_SSH_READY=1"
+)
+
 if not exist "!DPROJ!" (
     echo ERRO: DPROJ do Servidor nao encontrado: !DPROJ!
     exit /b 10
